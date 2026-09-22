@@ -3,6 +3,11 @@ public class No implements Comparable<No>{
     private Integer frequencia;
     private No esquerda, direita; 
 
+    public No(char caractere, int frequencia) {
+        this.caractere = caractere;
+        this.frequencia = frequencia;
+    }
+
     public No(char caractere, No direita, No esquerda, int frequencia) {
         this.caractere = caractere;
         this.direita = direita;

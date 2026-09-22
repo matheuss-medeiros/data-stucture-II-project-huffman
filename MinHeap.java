@@ -62,24 +62,35 @@ public class MinHeap {
         }
     }
 
-    // public No removeMinimo(){
-    //     No noRemovido = arrayList.get(0);
-    //     arrayList.set(0, arrayList.get(arrayList.size() - 1));
-    //     //procuro o menor
-    //     int pos = 0;
-    //     int menorFreq = arrayList.get(pos).getFrequencia();
-    //     for(int i = 0; i < Math.log(arrayList.size()) / Math.log(2); i++){
-    //         posMenor = (posMenor * 2) + 1;
-    //         menorFreq = arrayList.get(pos).getFrequencia(); 
-    //     }
-        
-    //     //preparo para o mov
-    //     No menor = arrayList.get(pos);
-    //     No subs = arrayList.get(0);
+    public No removeMinimo(){
+        if (arrayList.isEmpty()) return null;
+        No noRemovido = arrayList.get(0);
+        No ultimoNo = arrayList.remove(arrayList.size() - 1);
 
-    //     arrayList.set(0, menor);
-    //     arrayList.set(pos, subs);
-        
-    //     return noRemovido;
-    // }
+        if (!arrayList.isEmpty()) {
+            arrayList.set(0, ultimoNo);
+            int posAtual = 0;
+
+            while (true) {
+                int filhoEsq = (2 * posAtual) + 1;
+                int filhoDir = (2 * posAtual) + 2;
+                int posMenor = posAtual;
+
+                if (filhoEsq < arrayList.size() && arrayList.get(filhoEsq).getFrequencia() < arrayList.get(posMenor).getFrequencia()) {
+                    posMenor = filhoEsq;
+                }
+                if (filhoDir < arrayList.size() && arrayList.get(filhoDir).getFrequencia() < arrayList.get(posMenor).getFrequencia()) {
+                    posMenor = filhoDir;
+                }
+                if (posMenor == posAtual) break;
+                
+                No temp = arrayList.get(posAtual);
+                arrayList.set(posAtual, arrayList.get(posMenor));
+                arrayList.set(posMenor, temp);
+
+                posAtual = posMenor;
+            }
+        }
+        return noRemovido;
+     }
 }
