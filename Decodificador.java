@@ -22,7 +22,7 @@ public class Decodificador{
         }
     }
 
-    public static void descomprimir(BufferedInputStream entradaBits, No raiz, BufferedOutputStream saidaTexto, int totalChar) throws IOException{
+    public static void descomprimir(DataInputStream entradaBits, No raiz, BufferedOutputStream saidaTexto, int totalChar) throws IOException{
         No atual = raiz;
         int charLidos = 0;
         int byteLido;
