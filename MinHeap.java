@@ -40,7 +40,7 @@ public class MinHeap {
 
     public No getParentNodeFromPosition(Integer i){
         Integer pos = (i - 1) / 2;
-        if(pos > arrayList.size()){
+        if(pos >= arrayList.size()){
             return null;
         }
         No parentNode = arrayList.get(pos);
