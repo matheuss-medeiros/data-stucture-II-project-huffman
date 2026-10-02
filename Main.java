@@ -30,19 +30,24 @@ public class Main {
             if (operacao.equalsIgnoreCase("c")) {
                 // TODO: Chamar os métodos de compressão aqui
                 //ETAPA 1
-                System.out.println("[ETAPA 1] Tabela de frequencia de caracteres");
+                System.out.println("\n[ETAPA 1] Tabela de frequencia de caracteres");
                 Codificador codificador = new Codificador();
                 int frequencias[] = codificador.contarFrequencias(arquivoEntrada);
 
                 for(int i = 0; i < frequencias.length; i++){
                     if(frequencias[i] > 0){
-                        String charExibicao = (i == 10 || i == 13) ? "\\n" : String.valueOf((char)i);
+                        String charExibicao;
+                        //Filtro para não ter bug visual no terminal
+                        if (i == 10) charExibicao = "\\n";
+                        else if (i == 13) charExibicao = "\\r";
+                        else if (i < 32 || i >= 127) charExibicao = "?"; 
+                        else charExibicao = String.valueOf((char)i);
                         System.out.println("Caractere '" + charExibicao + "' (ASCII: " + i + "): " + frequencias[i]);
                     }
                 }
 
                 //ETAPA 2
-                System.out.println("[ETAPA 2] Min-Heap inicial");
+                System.out.println("\n[ETAPA 2] Min-Heap inicial");
                 int totalCaracteres = 0;
                 MinHeap minHeap = new MinHeap(new ArrayList<>());
                 for(int i = 0; i<frequencias.length; i++){
@@ -55,25 +60,37 @@ public class Main {
                 System.out.print("[ ");
                 for(int i = 0; i < minHeap.getArrayList().size(); i++){
                     No n = minHeap.getArrayList().get(i);
-                    String charExibicao = (n.getCaractere() == '\n' || n.getCaractere() == '\r') ? "\\n" : String.valueOf(n.getCaractere());
+                    int ascii = (int) n.getCaractere();
+                    //filtro para evitar o bug visual do terminal
+                    String charExibicao;
+                    if (ascii == 10) charExibicao = "\\n";
+                    else if (ascii == 13) charExibicao = "\\r";
+                    else if (ascii < 32 || ascii >= 127) charExibicao = "?"; 
+                    else charExibicao = String.valueOf(n.getCaractere());
+
                     System.out.print("No('" + charExibicao + "', " + n.getFrequencia() + ")");
                     if(i < minHeap.getArrayList().size() - 1) System.out.print(", ");
                 }
                 System.out.println(" ]");
 
                 //ETAPA 3
-                System.out.println("[ETAPA 3] Arvore de Huffman (contruida em memoria)");
+                System.out.println("\n[ETAPA 3] Arvore de Huffman (contruida em memoria)");
                 ArvoreHuffman arvore = new ArvoreHuffman();
                 No raiz = arvore.construirArvore(minHeap);
 
                 //ETAPA 4
-                System.out.println("[ETAPA 4] Tabela de codigos de Huffman");
+                System.out.println("\n[ETAPA 4] Tabela de codigos de Huffman");
                 codificador.gerarTabela(raiz);
                 String[] codigos = codificador.getTabelaCodigos();
 
                 for(int i = 0; i< codigos.length; i++){
                     if(codigos[i] != null){
-                        String charExibicao = (i == 10 || i == 13) ? "\\n" : String.valueOf((char)i);
+                        String charExibicao;
+                        // O mesmo filtro visual para impedir que o console trave e corte a Etapa 5
+                        if (i == 10) charExibicao = "\\n";
+                        else if (i == 13) charExibicao = "\\r";
+                        else if (i < 32 || i >= 127) charExibicao = "?";
+                        else charExibicao = String.valueOf((char)i);
                         System.out.println("Caractere '" + charExibicao + "': " + codigos[i]);
                     }
                 }
