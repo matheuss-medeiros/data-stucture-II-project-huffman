@@ -6,6 +6,7 @@
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 
 public class Codificador {
@@ -75,7 +76,7 @@ public class Codificador {
 
         try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(arquivoEntrada))) {
             int byteLido;
-            while ((byteLido = fis.read()) != -1) {
+            while ((byteLido = bis.read()) != -1) {
                 char caractere = (char) byteLido;
                 String codigoHuf = tabelaCodigos[caractere];
 
