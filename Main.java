@@ -47,7 +47,20 @@ public class Main {
                     codificador.comprimirArquivo(arquivoEntrada, raiz, dos, totalCaracteres);
                 }            
                 
-                System.out.println("Arquivo comprimido com sucesso para: " + arquivoSaida);
+                long tamanhoOriginalBytes = totalCaracteres;
+                File arquivoOut = new File(arquivoSaida);
+                long tamanhoComprimidoBytes = arquivoOut.length();
+                long tamanhoComprimidoBits = tamanhoComprimidoBytes * 8;
+                long tamanhoOriginalBits = tamanhoOriginalBytes * 8;
+
+                double taxaCompressao = (1.0 - ((double) tamanhoComprimidoBytes / tamanhoOriginalBytes)) * 100.0;
+
+                System.out.println("\nETAPA 5: Resumo da Compressao");
+                System.out.println("Tamanho original.... " + tamanhoOriginalBits + " bits (" + tamanhoOriginalBytes + " bytes)");
+                System.out.println("Tamanho comprimido. " + tamanhoComprimidoBits + " bits (" + tamanhoComprimidoBytes + " bytes)");
+                System.out.printf("Taxa de compressao. %.2f%%\n", taxaCompressao);
+                
+                System.out.println("\nArquivo comprimido com sucesso para: " + arquivoSaida);
 
 
             } else if (operacao.equalsIgnoreCase("d")) {
@@ -60,6 +73,8 @@ public class Main {
                     No raiz = Decodificador.lerCabecalho(dis);
                     Decodificador.descomprimir(dis, raiz, saidaTexto, totalCaracteres);
                 }
+
+                System.out.println("Arquivo descomprimido com sucesso para: " + arquivoSaida);
 
             } else {
                 System.out.println("Operação inválida! Use 'c' para comprimir ou 'd' para descomprimir.");
