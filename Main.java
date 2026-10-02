@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Main {
@@ -28,11 +29,20 @@ public class Main {
         try {
             if (operacao.equalsIgnoreCase("c")) {
                 // TODO: Chamar os métodos de compressão aqui
-                System.out.println("[ETAPA 1] Analisando frequências do arquivo...");
+                //ETAPA 1
+                System.out.println("[ETAPA 1] Tabela de frequencia de caracteres");
                 Codificador codificador = new Codificador();
                 int frequencias[] = codificador.contarFrequencias(arquivoEntrada);
 
-                System.out.println("[ETAPA 2 e 3] Construindo Min-Heap e Árvore de Huffman...");
+                for(int i = 0; i < frequencias.length; i++){
+                    if(frequencias[i] > 0){
+                        String charExibicao = (i == 10 || i == 13) ? "\\n" : String.valueOf((char)i);
+                        System.out.println("Caractere '" + charExibicao + "' (ASCII: " + i + "): " + frequencias[i]);
+                    }
+                }
+
+                //ETAPA 2
+                System.out.println("[ETAPA 2] Min-Heap inicial");
                 int totalCaracteres = 0;
                 MinHeap minHeap = new MinHeap(new ArrayList<>());
                 for(int i = 0; i<frequencias.length; i++){
@@ -42,12 +52,33 @@ public class Main {
                     }
                 }
 
+                System.out.print("[ ");
+                for(int i = 0; i < minHeap.getArrayList().size(); i++){
+                    No n = minHeap.getArrayList().get(i);
+                    String charExibicao = (n.getCaractere() == '\n' || n.getCaractere() == '\r') ? "\\n" : String.valueOf(n.getCaractere());
+                    System.out.print("No('" + charExibicao + "', " + n.getFrequencia() + ")");
+                    if(i < minHeap.getArrayList().size() - 1) System.out.print(", ");
+                }
+                System.out.println(" ]");
+
+                //ETAPA 3
+                System.out.println("[ETAPA 3] Arvore de Huffman (contruida em memoria)");
                 ArvoreHuffman arvore = new ArvoreHuffman();
                 No raiz = arvore.construirArvore(minHeap);
 
-                System.out.println("[ETAPA 4 e 5] Gerando códigos e escrevendo arquivo comprimido...");
-
+                //ETAPA 4
+                System.out.println("[ETAPA 4] Tabela de codigos de Huffman");
                 codificador.gerarTabela(raiz);
+                String[] codigos = codificador.getTabelaCodigos();
+
+                for(int i = 0; i< codigos.length; i++){
+                    if(codigos[i] != null){
+                        String charExibicao = (i == 10 || i == 13) ? "\\n" : String.valueOf((char)i);
+                        System.out.println("Caractere '" + charExibicao + "': " + codigos[i]);
+                    }
+                }
+
+                //ETAPA 5
                 try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(arquivoSaida)))) {
                     codificador.comprimirArquivo(arquivoEntrada, raiz, dos, totalCaracteres);
                 }            
