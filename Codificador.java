@@ -112,12 +112,12 @@ public class Codificador {
 
     public int[] contarFrequencias(String arquivoEntrada) throws IOException {
         int[] frequencias = new int[256];
-        try (FileInputStream fis = new FileInputStream(arquivoEntrada)) {
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(arquivoEntrada))) {
             int byteLido;
-            while ((byteLido = fis.read()) != -1) {
+            while ((byteLido = bis.read()) != -1) {
                 frequencias[byteLido]++;
             }
-        }
+        }      
         return frequencias;
     }   
 }
