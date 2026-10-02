@@ -88,4 +88,4 @@ nb-configuration.xml
 ## Miscellaneous
 ##############################
 *.log
-.arquivosClass
+./workspaces/data-stucture-II-project-huffman/arquivosClass
