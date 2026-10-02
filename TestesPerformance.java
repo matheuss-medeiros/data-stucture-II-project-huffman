@@ -130,10 +130,13 @@ public class TestesPerformance {
     }
 
     
-    //Lógica de Descompressão centralizada com base na sua Main_2.java
+    //Lógica de Descompressão centralizada
     private static void descomprimir(String arquivoEntrada, String arquivoSaida) throws IOException {
         try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(arquivoEntrada)));
              BufferedOutputStream saidaTexto = new BufferedOutputStream(new FileOutputStream(arquivoSaida))) {
+            
+            // Consumir a assinatura "HUFF" gerada pelo Codificador
+            dis.readUTF();
             
             int totalCaracteres = dis.readInt();
             No raiz = Decodificador.lerCabecalho(dis);
