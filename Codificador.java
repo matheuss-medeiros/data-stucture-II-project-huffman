@@ -60,6 +60,9 @@ public class Codificador {
     }
 
     public void comprimirArquivo(String arquivoEntrada, No raiz, DataOutputStream dos, int totalCaracteres) throws IOException {
+        //Grava assinatura de segurança no ficheiro
+        dos.writeUTF("HUFF");
+        
         // grava o total de caracteres 
         dos.writeInt(totalCaracteres);
 
