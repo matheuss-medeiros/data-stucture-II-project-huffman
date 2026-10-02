@@ -6,6 +6,14 @@
 public class ArvoreHuffman {
 
     public No construirArvore(MinHeap minHeap) {
+        if (minHeap.getArrayList().size() == 1) {
+            No unico = minHeap.removeMinimo();
+            No pai = new No('\0', unico.getFrequencia());
+            pai.setEsquerda(unico);
+            pai.setDireita(new No((char) ((unico.getCaractere() + 1) & 0xFF), 0));
+            return pai;
+        }
+        
         while (minHeap.getArrayList().size() > 1) {
             No esquerdo = minHeap.removeMinimo();
             No direito = minHeap.removeMinimo();
