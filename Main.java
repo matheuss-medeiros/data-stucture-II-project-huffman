@@ -27,10 +27,18 @@ public class Main {
         String arquivoSaida = args[2];
 
         try {
+
+            File in = new File(arquivoEntrada);
+            File out = new File(arquivoSaida);
+            if(in.getCanonicalPath().equals(out.getCanonicalPath())) {
+                System.out.println("Erro: O arquivo de saída não pode ser o mesmo de entrada.");
+                return;
+            }
+
             if (operacao.equalsIgnoreCase("c")) {
                 // TODO: Chamar os métodos de compressão aqui
                 //ETAPA 1
-                System.out.println("\n[ETAPA 1] Tabela de frequencia de caracteres");
+                System.out.println("\n[ETAPA 1 Tabela de frequencia de caracteres");
                 Codificador codificador = new Codificador();
                 int frequencias[] = codificador.contarFrequencias(arquivoEntrada);
 
@@ -47,7 +55,7 @@ public class Main {
                 }
 
                 //ETAPA 2
-                System.out.println("\n[ETAPA 2] Min-Heap inicial");
+                System.out.println("\n[ETAPA 2 Min-Heap inicial");
                 int totalCaracteres = 0;
                 MinHeap minHeap = new MinHeap(new ArrayList<>());
                 for(int i = 0; i<frequencias.length; i++){
@@ -74,12 +82,12 @@ public class Main {
                 System.out.println(" ]");
 
                 //ETAPA 3
-                System.out.println("\n[ETAPA 3] Arvore de Huffman (contruida em memoria)");
+                System.out.println("\n[ETAPA 3 Arvore de Huffman (contruida em memoria)");
                 ArvoreHuffman arvore = new ArvoreHuffman();
                 No raiz = arvore.construirArvore(minHeap);
 
                 //ETAPA 4
-                System.out.println("\n[ETAPA 4] Tabela de codigos de Huffman");
+                System.out.println("\n[ETAPA 4 Tabela de codigos de Huffman");
                 codificador.gerarTabela(raiz);
                 String[] codigos = codificador.getTabelaCodigos();
 
