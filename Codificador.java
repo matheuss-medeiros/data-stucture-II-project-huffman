@@ -70,7 +70,7 @@ public class Codificador {
         int bufferBits = 0;
         int quantidadeBits = 0;
 
-        try (FileInputStream fis = new FileInputStream(arquivoEntrada)) {
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(arquivoEntrada))) {
             int byteLido;
             while ((byteLido = fis.read()) != -1) {
                 char caractere = (char) byteLido;
