@@ -35,10 +35,10 @@ public class Main {
                 return;
             }
 
-            if (operacao.equalsIgnoreCase("c")) {
+            if (operacao.equalsIgnoreCase("c") || operacao.equalsIgnoreCase("-c")) {
                 // TODO: Chamar os métodos de compressão aqui
                 //ETAPA 1
-                System.out.println("\n[ETAPA 1 Tabela de frequencia de caracteres");
+                System.out.println("\nETAPA 1 Tabela de frequencia de caracteres");
                 Codificador codificador = new Codificador();
                 int frequencias[] = codificador.contarFrequencias(arquivoEntrada);
 
@@ -129,12 +129,23 @@ public class Main {
                 System.out.println("\nArquivo comprimido com sucesso para: " + arquivoSaida);
 
 
-            } else if (operacao.equalsIgnoreCase("d")) {
+            } else if (operacao.equalsIgnoreCase("d") || operacao.equalsIgnoreCase("-d")) {
                 System.out.println("[INFO] Iniciando descompressão do arquivo: " + arquivoEntrada);
 
                 try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(arquivoEntrada)));
                      BufferedOutputStream saidaTexto = new BufferedOutputStream(new FileOutputStream(arquivoSaida))) {
         
+                    try {
+                        String assinatura = dis.readUTF();
+                        if (!assinatura.equals("HUFF")) {
+                            System.out.println("Erro: O arquivo fornecido não é um arquivo comprimido válido (.huff).");
+                            return;
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Erro: Formato de arquivo inválido ou corrompido.");
+                        return;
+                    }
+                    
                     int totalCaracteres = dis.readInt();
                     No raiz = Decodificador.lerCabecalho(dis);
                     Decodificador.descomprimir(dis, raiz, saidaTexto, totalCaracteres);
