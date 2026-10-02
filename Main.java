@@ -64,6 +64,10 @@ public class Main {
                         totalCaracteres += frequencias[i];
                     }
                 }
+                if(totalCaracteres == 0) {
+                    System.out.println("Erro: O ficheiro de entrada está vazio. Não há dados para comprimir.");
+                    return;
+                }
 
                 System.out.print("[ ");
                 for(int i = 0; i < minHeap.getArrayList().size(); i++){
@@ -85,6 +89,7 @@ public class Main {
                 System.out.println("\n[ETAPA 3 Arvore de Huffman (contruida em memoria)");
                 ArvoreHuffman arvore = new ArvoreHuffman();
                 No raiz = arvore.construirArvore(minHeap);
+                imprimirArvoreVisual(raiz, "");
 
                 //ETAPA 4
                 System.out.println("\n[ETAPA 4 Tabela de codigos de Huffman");
@@ -145,5 +150,27 @@ public class Main {
             System.err.println("Erro durante a execução do processo: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static void imprimirArvoreVisual(No no, String prefixo){
+        if (no == null) return;
+    
+        // Identifica se é folha para imprimir o caractere ou se é nó interno
+        if (no.getEsquerda() == null && no.getDireita() == null) {
+            int ascii = (int) no.getCaractere();
+            String charExibicao;
+            if (ascii == 10) charExibicao = "\\n";
+            else if (ascii == 13) charExibicao = "\\r";
+            else if (ascii < 32 || ascii >= 127) charExibicao = "?"; 
+            else charExibicao = String.valueOf(no.getCaractere());
+            
+            System.out.println(prefixo + "└── Folha: '" + charExibicao + "' (Freq: " + no.getFrequencia() + ")");
+        } else {
+            System.out.println(prefixo + "├── Nó Interno (Freq: " + no.getFrequencia() + ")");
+        }
+        
+        // Desce na árvore adicionando espaçamento (indentação)
+        imprimirArvoreVisual(no.getEsquerda(), prefixo + "    ");
+        imprimirArvoreVisual(no.getDireita(), prefixo + "    ");
     }
 }
